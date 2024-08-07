@@ -21,11 +21,11 @@ app.use(fileuploader());
   {
         resp.sendFile(process.cwd()+"/public/dash-admin.html");
  }) 
-//==================================================
+//==================================================  
  var dbConfig={
     host:"127.0.0.1",
     user:"root",
-    password:"T#9758@qlph",
+    password:"HardikSQL@4818",
     database:"mysqlproject",
     dateStrings:true,
   }
