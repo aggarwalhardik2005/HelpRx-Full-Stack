@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="pics/angular.min.js"></script>
+    <script>
+        var module=angular.module("myModule",[]);
+        module.controller("myController",function($scope){
+         $scope.m1="";
+        $scope.m2="";
+        $scope.m3="";
+        $scope.tot;
+        $scope.per;
+        $scope.res;
+
+        $scope.doTot=function()
+        {
+            $scope.tot=$scope.m1+$scope.m2+$scope.m3;
+        }
+        $scope.doPer=function()
+        {
+            $scope.per=$scope.tot*100/300;
+        }
+        $scope.doRes=function()
+        {
+            if($scope.per>=40)
+            {
+                $scope.res="Pass";
+            }
+            else
+            {
+                $scope.res="Fail";
+            }
+        }
+        $scope.doClear=function()
+        {
+            $scope.m1="";
+        $scope.m2="";
+        $scope.m3="";
+        $scope.tot="";
+        $scope.per="";
+        $scope.res="";
+        }
+        })
+    </script>
+</head>
+<body ng-app="myModule" ng-controller="myController">
+    <center>
+        <table width="600">
+            <tr>
+                <td>C++</td>
+                <td>
+                    <input type="number" autofocus ng-model="m1">
+                </td>
+            </tr>
+            <tr>
+                <td>Java</td>
+                <td>
+                    <input type="number" ng-model="m2">
+                </td>
+            </tr>
+            <tr>
+                <td>Web</td>
+                <td>
+                    <input type="number" ng-model="m3">
+                </td>
+            </tr>
+    
+            <tr>
+                <td>Operations</td>
+                <td>
+                    <input type="button" value="Total" ng-click="doTot();">
+                     <input type="button" value="Per" ng-click="doPer();">
+                    <input type="button" value="Result" ng-click="doRes();">
+                    <input type="button" value="Clear All" ng-click="doClear();">
+                </td>
+            </tr>
+            <tr>
+                <td>Total Marks</td>
+                <td>
+                    {{tot}} 
+                </td>
+            </tr>
+            <tr>
+                <td>Percentage</td>
+                <td>
+                    {{per}}
+                </td>
+            </tr>
+            <tr>
+                <td>Result</td>
+                <td>
+                    {{res}}
+                </td>
+            </tr>
+        </table>
+    </center>
+</body>
+</html>

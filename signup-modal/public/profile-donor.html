@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>DONOR PROFILE PAGE</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script>
+      function doPrev(refFile,prevImg) //For PREVIEWING THE IMAGE
+      {
+          const [file] = refFile.files
+          if (file) {
+            prevImg.src = URL.createObjectURL(file)
+          }
+      }
+      //===============JSON================
+      $(document).ready(function(){
+        $("#btnSearch").click(function(){
+            var donemail=$("#dontxtEmail").val();
+            var obj={
+                type:"get",
+                url:"/donor-json-search",
+                data:{
+                  donkuchEmail:donemail
+                }
+            }
+            $.ajax(obj).done(function(respJSONKuch)
+            {
+         alert(JSON.stringify(respJSONKuch));//:-)  JSON.stringify is for converting JSON format into String(readable).
+         var avt=respJSONKuch[0].ahours.split("To");
+           av1=avt[0];
+           av2=avt[1];
+         $("#dontxtname").val(respJSONKuch[0].name);
+         $("#dontxtcont").val(respJSONKuch[0].mobile);
+        $("#dontxtaddr").val(respJSONKuch[0].address);
+          $("#donchkcity").val(respJSONKuch[0].city);
+        $("#donprooof").val(respJSONKuch[0].proof);
+        $("#fromtxttime").val(av1);
+        $("#totxttime").val(av2);
+         $("#donimgPrev").prop("src","/project-uploads/"+respJSONKuch[0].pic);
+       $("#hdn").val(respJSONKuch[0].pic);//SAVING NAME OF PIC IN A HIDDEN TEXTBOX SO THA WE CAN USE IT WHILE PIC IS UPDATED IN TABLE
+            }).fail(function(errKuch){
+                 alert(errKuch)
+            })
+    });
+     //==================Auto Email filling
+     function setActiveUser()
+    {
+      if(localStorage.getItem("activeKuch")==undefined)
+            {
+                location.href="index.html";
+                return;
+            }
+      var au=localStorage.getItem("activeKuch");
+     // alert(au);
+      //console.log(au);
+      $("#dontxtEmail").val(au).prop("readonly",true);
+    }
+    setActiveUser();
+    $("#btnlogout").click(function(){
+            localStorage.removeItem("activeKuch");
+            location.href="index.html";
+  });
+      });
+  </script>
+  </head>
+  <body>
+    <input type="hidden" id="hdn" name="hdn">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand ms-4" href="">
+          <img src="pics/Medical Prescription Rx Logo.jpeg" style="border-radius: 50%;" alt="Logo" width="40" height="40" class="d-inline-block align-text-center">&nbsp;&nbsp;
+          HelpRX</a>
+        <div class="collapse navbar-collapse justify-content-end">
+              <button class="btn btn-outline-success mx-3" type="button" id="btnlogout">Logout</button>
+        </div>
+      </div>
+    </nav>
+    <div class="container mt-2">
+      <span><h2 class="text-center">Donor Profile Page</h2></span>
+    <div class="row mb-5">
+      <div class="col-md-12">
+    <form class="row g-3" method="post" enctype="multipart/form-data">
+  <div class="col-md-6">
+   <b> <label for="dontxtEmail" class="form-label">Email</label></b>
+    <input type="email" name="dontxtEmail" id="dontxtEmail" class="form-control">
+  </div>
+  <div class="col-md-6 mt-5">
+    <button type="button" class="btn btn-outline-success" id="btnSearch"><b>Search</b></button>
+  </div>
+  <div class="col-6">
+  <b>  <label class="form-label">Name</label></b>
+    <input type="text" id="dontxtname" name="dontxtname" class="form-control">
+  </div>
+  <div class="col-6">
+   <b> <label class="form-label">Contact Number</label></b>
+    <input type="text" name="dontxtcont" id="dontxtcont" class="form-control">
+  </div>
+  <div class="col-md-8">
+   <b> <label class="form-label">Address</label></b>
+    <input type="text" name="dontxtaddr" id="dontxtaddr" class="form-control">
+  </div>
+  <div class="col-md-4">
+   <b> <label for="donchkcity" class="form-label">City</label></b>
+   <input class="form-control" name="donchkcity" list="datalistOptions" id="donchkcity" placeholder="Choose...">
+   <datalist id="datalistOptions">
+     <option value="San Francisco">
+     <option value="New York">
+     <option value="Seattle">
+     <option value="Los Angeles">
+     <option value="Chicago">
+   </datalist>
+  </div>
+  <div class="col-md-6">
+   <b> <label class="form-label">ID Proof Type</label></b>
+    <select class="form-select" name="donprooof" id="donprooof">
+      <option value="none">Select..</option>
+      <option value="Adhar Card">Adhar Card</option>
+      <option value="Pan Card">Pan Card</option>
+      <option value="Driving Liscence">Driving Liscence</option>
+      <option value="Others">Others</option>
+    </select>
+  </div>
+  <div class="col-md-4 ">
+   <b> <label class="form-label">Profile Pic</label></b>
+    <input type="file" class="form-control bg-secondary-subtle" onchange="doPrev(this,donimgPrev);" name="ppic" accept="image/*">
+  </div>
+  <div class="col-md-2">
+    <img id="donimgPrev" width="100" height="100">
+  </div>
+   <b> <label class="form-label">Availability Hours</label></b>
+   <div class="col-md-4 mx-5 mb-2">
+   <b> <label class="form-label">From</label></b>
+   <input type="text" name="fromtxttime" id="fromtxttime" class="form-control"  placeholder="Select...">
+  </div>
+  <div class="col-md-4 mx-5 mb-2">
+    <b> <label class="form-label">To</label></b>
+    <input type="text" name="totxttime" id="totxttime" class="form-control"  placeholder="Select...">
+   </div>   
+  <div class="col-6 justify-content-md-end d-md-flex mb-3">
+    <button type="submit" class="btn btn-primary" formaction="/donor-profile-process">Submit</button>
+  </div>
+  <div class="col-6 mb-3">
+    <button type="submit" id="btnUpdt" class="btn btn-primary" formaction="/donor-json-update">Update</button>
+  </div>
+</form>
+</div>
+</div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>

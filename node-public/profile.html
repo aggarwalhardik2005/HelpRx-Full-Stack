@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Bootstrap demo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script>
+      function doPrev(refFile,prevImg) //For PREVIEWING THE IMAGE
+      {
+          const [file] = refFile.files
+          if (file) {
+            prevImg.src = URL.createObjectURL(file)
+          }
+      }
+      //===============JSON================
+      $(document).ready(function(){
+        $("#btnSearch").click(function(){
+            var emailKu=$("#txtEmail").val();
+            var obj={
+                type:"get",
+                url:"/get-json-search",
+                data:{
+                  kuchEmail:emailKu
+                }
+            }
+            $.ajax(obj).done(function(respJSONKuch)
+            {
+         alert(JSON.stringify(respJSONKuch));//:-)  JSON.stringify is for converting JSON format into String(readable).
+         $("#txtname").val(respJSONKuch[0].name);
+         $("#txtcont").val(respJSONKuch[0].contact);
+        $("#txtaddr").val(respJSONKuch[0].address);
+          $("#chkcity").val(respJSONKuch[0].city);
+        $("#chkgndr").val(respJSONKuch[0].gender);
+          $("#txtdob").val(respJSONKuch[0].dob);
+         $("#imgPrev").prop("src","uploads/"+respJSONKuch[0].idpicname);
+       $("#hdn").val(respJSONKuch[0].idpicname);//SAVING NAME OF PIC IN A HIDDEN TEXTBOX SO THA WE CAN USE IT WHILE PIC IS UPDATED IN TABLE
+       $("#hdnfile").val(respJSONKuch[0].idproof);
+            }).fail(function(errKuch){
+                 alert(errKuch)
+            })
+    });
+    //========================================
+    //  CALLING A FUNCTION WALA METHOD(CALL ANYWHERE U WANT)
+    // function doSearch()
+    // {
+    //         var emailKu=$("#txtEmail").val();
+    //         var obj={
+    //             type:"get",
+    //             url:"/get-json-record",
+    //             data:{
+    //               kuchEmail:emailKu
+    //             }
+    //         }
+
+    //         $.ajax(obj).done(function(respJSONKuch)
+    //         {
+    //             alert(JSON.stringify(respJSONKuch));//:-)
+    //             //$("#res").html(respKuch);
+    //             $("#txtPwd").val(respJSONKuch[0].password)
+    //             $("#dob").val(respJSONKuch[0].dob);
+    //             $("#imgPrev").prop("src","uploads/"+respJSONKuch[0].picname);
+
+    //             $("#hdn").val(respJSONKuch[0].picname);
+
+    //         }).fail(function(errKuch){
+    //              alert(errKuch)
+    //             //$("#res").html(respKuch);
+    //         })
+    //       }
+//======================================================
+
+      });
+      
+  </script>
+  </head>
+  <body class="bg-info">
+    <input type="hidden" id="hdn" name="hdn">
+    <input type="hidden" id="hdnfile" name="hdnfile">
+    <div class="container bg-primary-subtle mt-5">
+      <span><h2 class="text-center">Profile Page</h2></span>
+    <div class="row mt-5 mb-5">
+      <div class="col-md-12">
+    <form class="row g-3" method="post" enctype="multipart/form-data">
+  <div class="col-md-6">
+   <b> <label for="txtEmail" class="form-label">Email</label></b>
+    <input type="email" name="txtEmail" id="txtEmail" class="form-control" id="inputEmail4">
+  </div>
+  <div class="col-md-6 mt-5">
+    <button type="button" class="btn btn-outline-success" id="btnSearch"><b>Search</b></button>
+  </div>
+  <div class="col-6">
+  <b>  <label class="form-label">Name</label></b>
+    <input type="text" id="txtname" name="txtname" class="form-control">
+  </div>
+  <div class="col-6">
+   <b> <label class="form-label">Contact Number</label></b>
+    <input type="text" name="txtcont" id="txtcont" class="form-control">
+  </div>
+  <div class="col-md-8">
+   <b> <label class="form-label">Address</label></b>
+    <input type="text" name="txtaddr" id="txtaddr" class="form-control">
+  </div>
+  <div class="col-md-4">
+   <b> <label for="chkcity" class="form-label">City</label></b>
+   <input class="form-control" name="chkcity" list="datalistOptions" id="chkcity" placeholder="Choose...">
+   <datalist id="datalistOptions">
+     <option value="San Francisco">
+     <option value="New York">
+     <option value="Seattle">
+     <option value="Los Angeles">
+     <option value="Chicago">
+   </datalist>
+  </div>
+  <div class="col-md-6">
+   <b> <label class="form-label">Date Of Birth</label></b>
+    <input type="date" name="txtdob" id="txtdob" class="form-control" >
+  </div>
+  <div class="col-md-4">
+   <b> <label for="chkgndr" class="form-label">Gender</label></b>
+   <input class="form-control" name="chkgndr" list="datalistOptions2" id="chkgndr" placeholder="Choose...">
+   <datalist id="datalistOptions2">
+     <option value="Male">
+     <option value="Female">
+     <option value="Transgender">
+   </datalist>
+  </div>
+  <div class="col-md-4">
+   <b> <label class="form-label">Upload ID Proof</label></b>
+    <input type="file" name="idfile" id="idfile" class="form-control bg-secondary-subtle">
+  </div>
+  <div class="col-md-4 offset-md-2">
+   <b> <label class="form-label">Profile Pic</label></b>
+    <input type="file" class="form-control bg-secondary-subtle" onchange="doPrev(this,imgPrev);" name="ppic" accept="image/*">
+  </div>
+  <div class="col-md-2">
+    <img src="" id="imgPrev" width="100" height="100">
+  </div>
+  <div class="col-6 justify-content-md-end d-md-flex mb-3">
+    <button type="submit" class="btn btn-primary" formaction="/db-profile-process">Submit</button>
+  </div>
+  <div class="col-6 mb-3">
+    <button type="submit" id="btnUpdt" class="btn btn-primary" formaction="/get-json-update">Update</button>
+  </div>
+</form>
+</div>
+</div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>

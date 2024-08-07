@@ -1,0 +1,11 @@
+body{
+    background-color: pink;
+}
+*
+{
+    margin: 0px;
+}
+#myCarousel
+{
+    height: 250px;
+}

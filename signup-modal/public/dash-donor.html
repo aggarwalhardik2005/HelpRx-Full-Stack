@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DASHBOARD</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <script>
+    $(document).ready(function(){
+      $("#updtpass").click(function(){
+        var chngemail=$("#chngtxtEmail").val();
+        var oldpwd=$("#oldtxtPwd").val();
+        var newpwd=$("#newtxtPwd").val();
+        var confpwd=$("#conftxtPwd").val();
+            var obj={
+                type:"get",
+                url:"/donor-json-settings",
+                data:{
+                  newkuchEmail:chngemail,
+                  oldpwdkuch:oldpwd,
+                  newkuchpwd:newpwd,
+                  confkuchpwd:confpwd,
+                }
+            } 
+            if(oldpwd!=newpwd)
+            {
+              if(newpwd==confpwd)
+              {
+                $.ajax(obj).done(function(respJSONKuch)
+            {
+         alert(JSON.stringify(respJSONKuch));//:-)  JSON.stringify is for converting JSON format into String(readable).
+            }).fail(function(errKuch){
+                 alert(errKuch)
+            })
+              }
+              else
+              {
+                alert("Confirm Password does not match with New Password");
+              }
+            }
+            else
+            {
+              alert("old and New Password cannot be Same");
+            }
+           
+      });
+       //=========================================
+    function setActiveUser()
+    {
+      if(localStorage.getItem("activeKuch")==undefined)
+            {
+                location.href="index.html";
+                return;
+            }
+      var au=localStorage.getItem("activeKuch");
+      //alert(au);
+      $("#spanWelcome").html(au);
+      $("#chngtxtEmail").val(au);
+    }
+    setActiveUser();
+    $("#btndashlogout").click(function(){
+            localStorage.removeItem("activeKuch");
+            location.href="index.html";
+  });
+    });
+  </script>
+  <style>
+    *  
+    {
+        margin: 0px;
+    }
+   
+  </style>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand ms-4" href="">
+          <img src="pics/Medical Prescription Rx Logo.jpeg" style="border-radius: 50%;" alt="Logo" width="40" height="40" class="d-inline-block align-text-center">&nbsp;&nbsp;
+          HelpRX</a>
+        <div class="collapse navbar-collapse justify-content-end">
+              <button class="btn btn-outline-success mx-3" type="button" id="btndashlogout">Logout</button>
+        </div>
+      </div>
+    </nav>
+  <center>
+    <center>
+    <h1 class="mt-3">
+     Welcome:&nbsp;<span id="spanWelcome">*</span>&nbsp;To Donor Dashboard
+    </h1>
+  </center>
+  <div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mt-5" style="width: 19rem;">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9PG_QT6BG2RYj06CP4lcC8g78RkcoA3HPaQElhfMiXx-jZT_yUBy6gbJY_Fencjem20o&usqp=CAU" class="card-img-top" alt="...">
+                <div class="card-body">
+                 <center> <h5 class="card-title">Go To Profile Page</h5></center>
+                 <center> <a href="profile-donor.html" class="btn btn-primary col-8">Profile</a></center>
+                </div>
+              </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mt-5" style="width: 19rem;">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs1g3QI1B5xPuUqz3LaRIjHpavk04qHslfWQ&usqp=CAU" class="card-img-top" alt="...">
+                <div class="card-body">
+                 <center> <h5 class="card-title">Click To Avail Medicine</h5></center>
+                 <center> <a href="avail-med.html" class="btn btn-primary col-8">Avail Medicine</a></center>
+                </div>
+              </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mt-5" style="width: 19rem;">
+              <img src="https://png.pngtree.com/element_our/20200610/ourlarge/pngtree-medical-round-label-image_2245071.jpg" class="card-img-top" alt="...">
+              <!-- <img src="https://media.istockphoto.com/id/1139778389/vector/medical-record-concept-vector-illustration-medical-diagnosis-medical-history-patient-card.jpg?s=612x612&w=0&k=20&c=h-UCwp1DZesP-CXCLnakzsyWzKqUoVJMBJ_LR75vekg=" class="card-img-top" alt="..."> -->
+                <div class="card-body">
+                 <center> <h5 class="card-title">Manage Your Medicines</h5></center>
+                  <center><a href="med-manager.html" class="btn btn-primary col-8">Medicine Manager</a></center>
+                </div>
+              </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mt-5" style="width: 19rem;">
+              <img src="data:image/png;base64,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" class="card-img-top" alt="...">
+                <div class="card-body">
+                 <center> <h5 class="card-title">Go To Settings</h5></center>
+                  <center><button class="btn btn-primary col-8 " type="button" id="btnsett" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Settings</button></center>
+                </div>
+              </div>
+        </div>
+    </div>
+  </div>
+</center>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Settings</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form class="row g-3">
+              <div class="col-md-12">
+      <center> <h5 class="card-title">Change Password</h5></center>
+                <label for="ntxtEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="chngtxtEmail" name="chngtxtEmail" required readonly> 
+              </div>
+              <div class="col-md-12">
+                  <label for="ntxtPwd" class="form-label">Old Password</label>
+                  <input type="password" class="form-control" name="oldtxtPwd" id="oldtxtPwd" required>
+                </div>
+                <div class="col-md-12">
+                  <label for="ntxtPwd" class="form-label"> New Password</label>
+                  <input type="password" class="form-control" name="newtxtPwd" id="newtxtPwd" required>
+                </div>
+                <div class="col-md-12">
+                  <label for="ntxtPwd" class="form-label">Confirm Password</label>
+                  <input type="password" class="form-control" name="conftxtPwd" id="conftxtPwd" required>
+                </div>
+              <div class="col-12">
+               <center> <button type="button" class="btn btn-outline-primary mx-3" id="updtpass">Update Password</button></center>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>

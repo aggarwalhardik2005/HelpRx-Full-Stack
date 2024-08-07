@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MEDICINE MANAGER</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="pics/angular.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script>
+        var module=angular.module("myModule",[]);
+        module.controller("myController",function($scope,$http){
+                $scope.AvailmedArray;
+                $scope.emailID;
+                //-------------
+                $scope.doDelete=function(srnoKu)
+                {
+                    if(confirm("Are U Sure You Want To Delete This Medicine?")==false)
+                        return;
+                        var url="/do-angular-availmed-delete?Kuchsrno="+srnoKu;
+                        $http.get(url).then(done,fail);
+                        function done(response)
+                        {
+                           alert(response.data);
+                           $scope.getRecords();
+                        }
+                     function fail(response)
+                        {
+                                alert(response.data);
+                        }   
+                }
+                //==============
+                $scope.getRecords=function()
+                {
+                    var url="/get-avail-med-records?emailkuch="+$scope.emailID;
+                    $http.get(url).then(done,fail);
+                    function done(response)
+                        {
+                           // alert(JSON.stringify(response.data));
+                            $scope.AvailmedArray=response.data;
+                        }
+                     function fail(response)
+                        {
+                                alert(response.data);
+                        }   
+                }
+                 //==================Auto Email filling
+    function setActiveUser()
+    {
+      if(localStorage.getItem("activeKuch")==undefined)
+            {
+                location.href="index.html";
+                return;
+            }
+      var au=localStorage.getItem("activeKuch");
+     // alert(au);
+      //console.log(au);
+      $scope.emailID=au;
+     // $("#angularavailemail").val(au).prop("readonly",true);
+    }
+    setActiveUser();
+    $("#btnlogout").click(function(){
+            localStorage.removeItem("activeKuch");
+            location.href="index.html";
+  });
+        });
+    </script>
+  </head>
+  <body ng-app="myModule" ng-controller="myController" ng-init="setActiveUser();">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand ms-4" href="">
+          <img src="pics/Medical Prescription Rx Logo.jpeg" style="border-radius: 50%;" alt="Logo" width="40" height="40" class="d-inline-block align-text-center">&nbsp;&nbsp;
+          HelpRX</a>
+        <div class="collapse navbar-collapse justify-content-end">
+              <button class="btn btn-outline-success mx-3" type="button" id="btnlogout">Logout</button>
+        </div>
+      </div>
+    </nav>
+    <center>
+      <h1 class="mt-4 text-success">Medicine Manager</h1>
+    </center>
+  <center>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-12">
+    <form class="row ms-5" method="post" enctype="multipart/form-data">
+        <div class="row mt-4 mb-4">
+            <label for="angularavailemail" class="col-sm-2 col-form-label"><b>Email</b></label>
+            <div class="col-md-4">
+              <input type="email" class="form-control" name="angularavailemail" id="angularavailemail" placeholder="Enter Email ID" ng-model="emailID" readonly>
+            </div>
+            <div class="col-md-4">
+    <button type="button" class="btn btn-outline-success" ng-click="getRecords();">Get Records</button>
+              </div>
+          </div>
+    </form>
+    </div>
+    </div>
+    
+    <table class="table table-success table-striped table-hover table-bordered border-black">
+        <thead class="table-dark" align="center">
+          <tr>
+            <th scope="col">SrNo.</th>
+            <th scope="col">Email</th>
+            <th scope="col">Medicine Name</th>
+            <th scope="col">Expiry Date</th>
+            <th scope="col">Packing</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Operations</th>
+          </tr>
+        </thead>
+        <tbody align="center">
+          <tr ng-repeat="obj in AvailmedArray">
+            <th scope="row">{{$index+1}}</th>
+            <td>{{obj.email}}</td>
+            <td>{{obj.med}}</td>
+            <td>{{obj.expdate}}</td>
+            <td>{{obj.packing}}</td>
+            <td>{{obj.qty}}</td>
+            <td>
+    <button type="button" class="btn btn-primary col-4 ms-5" ng-click="doDelete(obj.srno);">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  </center>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>
